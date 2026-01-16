@@ -1,36 +1,39 @@
 ---
-title: API Konnect
+title: API Kayser
 description: API para gestión de autenticación y consulta de tiendas con stock disponible
 template: splash
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-API para gestión de autenticación y consulta de tiendas con stock disponible
-
-**Servidor de producción:** `https://api.konnect.com`
-
----
 
 ## Autenticación
 
+<Card title="Bearer Authentication" >
+
 Todos los endpoints protegidos requieren un token JWT obtenido desde el endpoint de autenticación.
 
-### Bearer Authentication
+<div style="background: #f6f8fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #667eea; margin-top: 1rem;">
 
 - **Tipo:** HTTP Bearer
 - **Formato:** JWT
 - **Header:** `Authorization: Bearer {token}`
 
+</div>
+
+</Card>
+
 ---
 
 ## Endpoints
 
-### Obtener Token de Acceso
+### <span style="color: #667eea;">Obtener Token de Acceso</span>
 
 Genera un token JWT para acceder a endpoints protegidos.
 
-**Endpoint:** `POST /auth/token`
+<div style="background: linear-gradient(to right, #667eea, #764ba2); color: white; padding: 0.75rem 1.5rem; border-radius: 6px; display: inline-block; font-weight: 600; margin: 1rem 0;">
+  POST /auth/token
+</div>
 
 #### Request Body
 
@@ -41,12 +44,18 @@ Genera un token JWT para acceder a endpoints protegidos.
 }
 ```
 
+<div style="overflow-x: auto;">
+
 | Campo | Tipo | Requerido | Descripción |
 |-------|------|-----------|-------------|
 | `client_id` | string | Sí | ID del cliente |
 | `client_secret` | string | Sí | Secreto del cliente |
 
+</div>
+
 #### Respuestas
+
+<div style="border-left: 4px solid #10b981; padding-left: 1rem; margin: 1.5rem 0;">
 
 **200 - Autenticación exitosa**
 
@@ -62,6 +71,10 @@ Genera un token JWT para acceder a endpoints protegidos.
 }
 ```
 
+</div>
+
+<div style="border-left: 4px solid #f59e0b; padding-left: 1rem; margin: 1.5rem 0;">
+
 **400 - Credenciales incompletas**
 
 ```json
@@ -73,6 +86,10 @@ Genera un token JWT para acceder a endpoints protegidos.
   }
 }
 ```
+
+</div>
+
+<div style="border-left: 4px solid #ef4444; padding-left: 1rem; margin: 1.5rem 0;">
 
 **401 - Credenciales inválidas**
 
@@ -86,18 +103,27 @@ Genera un token JWT para acceder a endpoints protegidos.
 }
 ```
 
+</div>
+
 ---
 
-### Obtener Tiendas con Stock
+### <span style="color: #667eea;">Obtener Tiendas con Stock</span>
 
 Consulta tiendas con stock disponible para un producto específico.
 
-**Endpoint:** `POST /api/v1/bot/tiendas_disponibles`
+<div style="background: linear-gradient(to right, #667eea, #764ba2); color: white; padding: 0.75rem 1.5rem; border-radius: 6px; display: inline-block; font-weight: 600; margin: 1rem 0;">
+  POST /api/v1/bot/tiendas_disponibles
+</div>
 
+<div style="background: #fef3c7; border: 1px solid #f59e0b; padding: 0.75rem 1rem; border-radius: 6px; margin: 1rem 0;">
+  
 **Autenticación requerida:** Bearer Token
 
-#### Request Body
+</div>
 
+
+<CardGrid>
+  <Card title="Body">
 ```json
 {
   "sku": "7800010492139",
@@ -108,6 +134,21 @@ Consulta tiendas con stock disponible para un producto específico.
   }
 }
 ```
+  </Card>
+
+	  <Card title="Headers">
+```json
+ {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+```
+  </Card>
+
+</CardGrid>
+
+
+<div style="overflow-x: auto;">
 
 | Campo | Tipo | Requerido | Descripción |
 |-------|------|-----------|-------------|
@@ -117,7 +158,11 @@ Consulta tiendas con stock disponible para un producto específico.
 | `location.lat` | number | Sí | Latitud |
 | `location.lng` | number | Sí | Longitud |
 
+</div>
+
 #### Respuestas
+
+<div style="border-left: 4px solid #10b981; padding-left: 1rem; margin: 1.5rem 0;">
 
 **200 - Tiendas con stock**
 
@@ -145,11 +190,18 @@ Consulta tiendas con stock disponible para un producto específico.
             "stock": 12
           }
         ]
-      }
+      },
+			{
+			 ...
+			}
     ]
   }
 }
 ```
+
+</div>
+
+<div style="border-left: 4px solid #f59e0b; padding-left: 1rem; margin: 1.5rem 0;">
 
 **400 - Parámetros inválidos**
 
@@ -163,6 +215,10 @@ Consulta tiendas con stock disponible para un producto específico.
 }
 ```
 
+</div>
+
+<div style="border-left: 4px solid #ef4444; padding-left: 1rem; margin: 1.5rem 0;">
+
 **401 - No autorizado**
 
 ```json
@@ -174,6 +230,10 @@ Consulta tiendas con stock disponible para un producto específico.
   }
 }
 ```
+
+</div>
+
+<div style="border-left: 4px solid #ef4444; padding-left: 1rem; margin: 1.5rem 0;">
 
 **500 - Error interno**
 
@@ -187,11 +247,17 @@ Consulta tiendas con stock disponible para un producto específico.
 }
 ```
 
+</div>
+
 ---
 
 ## Modelos de Datos
 
-### ErrorResponse
+<CardGrid>
+
+<Card title="ErrorResponse">
+
+<div style="overflow-x: auto;">
 
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
@@ -199,7 +265,13 @@ Consulta tiendas con stock disponible para un producto específico.
 | `message` | string | Mensaje descriptivo del error |
 | `data.cod` | string | Código del error |
 
-### AuthTokenResponse
+</div>
+
+</Card>
+
+<Card title="AuthTokenResponse">
+
+<div style="overflow-x: auto;">
 
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
@@ -209,7 +281,13 @@ Consulta tiendas con stock disponible para un producto específico.
 | `data.token_type` | string | Tipo de token (Bearer) |
 | `data.expires_in` | integer | Tiempo de expiración en segundos |
 
-### Store
+</div>
+
+</Card>
+
+<Card title="Store">
+
+<div style="overflow-x: auto;">
 
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
@@ -218,7 +296,13 @@ Consulta tiendas con stock disponible para un producto específico.
 | `distancia_km` | number | Distancia en kilómetros |
 | `productos` | array | Lista de productos disponibles |
 
-### Product
+</div>
+
+</Card>
+
+<Card title="Product">
+
+<div style="overflow-x: auto;">
 
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
@@ -230,5 +314,11 @@ Consulta tiendas con stock disponible para un producto específico.
 | `precio` | number | Precio del producto |
 | `imagen_url` | string | URL de la imagen |
 | `stock` | integer | Cantidad en stock |
+
+</div>
+
+</Card>
+
+</CardGrid>
 
 ---

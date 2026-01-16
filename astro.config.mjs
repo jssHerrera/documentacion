@@ -6,7 +6,8 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
 	integrations: [
 		starlight({
-			title: 'API Konnect',
+			title: 'API Kayser',
+			favicon: '/favicon.ico',
 			sidebar: [
 				{
 					label: 'Guides',
