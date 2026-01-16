@@ -1,40 +1,234 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
-template: splash # Remove or comment out this line to display the site sidebar on this page.
-hero:
-  tagline: Congrats on setting up a new Starlight project!
-  image:
-    file: ../../assets/houston.webp
-  actions:
-    - text: Example Guide
-      link: /guides/example/
-      icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
-      icon: external
-      variant: minimal
+title: API Konnect
+description: API para gestión de autenticación y consulta de tiendas con stock disponible
+template: splash
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-## Next steps
+API para gestión de autenticación y consulta de tiendas con stock disponible
 
-<CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
-	</Card>
-	<Card title="Change page layout" icon="document">
-		Delete `template: splash` in `src/content/docs/index.mdx` to display a
-		sidebar on this page.
-	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
-	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
-	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
-	</Card>
-</CardGrid>
+**Servidor de producción:** `https://api.konnect.com`
+
+---
+
+## Autenticación
+
+Todos los endpoints protegidos requieren un token JWT obtenido desde el endpoint de autenticación.
+
+### Bearer Authentication
+
+- **Tipo:** HTTP Bearer
+- **Formato:** JWT
+- **Header:** `Authorization: Bearer {token}`
+
+---
+
+## Endpoints
+
+### Obtener Token de Acceso
+
+Genera un token JWT para acceder a endpoints protegidos.
+
+**Endpoint:** `POST /auth/token`
+
+#### Request Body
+
+```json
+{
+  "client_id": "cliente_api_001",
+  "client_secret": "secret123"
+}
+```
+
+| Campo | Tipo | Requerido | Descripción |
+|-------|------|-----------|-------------|
+| `client_id` | string | Sí | ID del cliente |
+| `client_secret` | string | Sí | Secreto del cliente |
+
+#### Respuestas
+
+**200 - Autenticación exitosa**
+
+```json
+{
+  "ok": true,
+  "message": "Autenticación exitosa",
+  "data": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "token_type": "Bearer",
+    "expires_in": 600
+  }
+}
+```
+
+**400 - Credenciales incompletas**
+
+```json
+{
+  "ok": false,
+  "message": "Credenciales incompletas",
+  "data": {
+    "cod": "INVALID_CREDENTIALS"
+  }
+}
+```
+
+**401 - Credenciales inválidas**
+
+```json
+{
+  "ok": false,
+  "message": "Credenciales inválidas",
+  "data": {
+    "cod": "UNAUTHORIZED"
+  }
+}
+```
+
+---
+
+### Obtener Tiendas con Stock
+
+Consulta tiendas con stock disponible para un producto específico.
+
+**Endpoint:** `POST /api/v1/bot/tiendas_disponibles`
+
+**Autenticación requerida:** Bearer Token
+
+#### Request Body
+
+```json
+{
+  "sku": "7800010492139",
+  "sku_padre": "50.200",
+  "location": {
+    "lat": -12.0464,
+    "lng": -77.0428
+  }
+}
+```
+
+| Campo | Tipo | Requerido | Descripción |
+|-------|------|-----------|-------------|
+| `sku` | string | Sí | Código SKU del producto |
+| `sku_padre` | string | Sí | Código SKU padre del producto |
+| `location` | object | Sí | Ubicación geográfica |
+| `location.lat` | number | Sí | Latitud |
+| `location.lng` | number | Sí | Longitud |
+
+#### Respuestas
+
+**200 - Tiendas con stock**
+
+```json
+{
+  "ok": true,
+  "message": "Tiendas con Stock",
+  "data": {
+    "sku_padre": "50.200",
+    "tiendas_encontradas": 62,
+    "tiendas": [
+      {
+        "cod_tienda": "ALM220",
+        "nombre_tienda": "CANALES WEB KAYSER",
+        "distancia_km": 0,
+        "productos": [
+          {
+            "sku": "7800010492139",
+            "cod_producto": "50.200-BEI-XL",
+            "color": "BEIGE",
+            "talla": "XL",
+            "marca": "KAYSER",
+            "precio": 49.9,
+            "imagen_url": "https://...",
+            "stock": 12
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**400 - Parámetros inválidos**
+
+```json
+{
+  "ok": false,
+  "message": "Parámetros inválidos",
+  "data": {
+    "cod": "INVALID_PARAMS"
+  }
+}
+```
+
+**401 - No autorizado**
+
+```json
+{
+  "ok": false,
+  "message": "No autorizado",
+  "data": {
+    "cod": "UNAUTHORIZED"
+  }
+}
+```
+
+**500 - Error interno**
+
+```json
+{
+  "ok": false,
+  "message": "Error interno del servidor",
+  "data": {
+    "cod": "INTERNAL_ERROR"
+  }
+}
+```
+
+---
+
+## Modelos de Datos
+
+### ErrorResponse
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `ok` | boolean | Estado de la operación |
+| `message` | string | Mensaje descriptivo del error |
+| `data.cod` | string | Código del error |
+
+### AuthTokenResponse
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `ok` | boolean | Estado de la operación |
+| `message` | string | Mensaje descriptivo |
+| `data.access_token` | string | Token JWT de acceso |
+| `data.token_type` | string | Tipo de token (Bearer) |
+| `data.expires_in` | integer | Tiempo de expiración en segundos |
+
+### Store
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `cod_tienda` | string | Código de la tienda |
+| `nombre_tienda` | string | Nombre de la tienda |
+| `distancia_km` | number | Distancia en kilómetros |
+| `productos` | array | Lista de productos disponibles |
+
+### Product
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `sku` | string | Código SKU del producto |
+| `cod_producto` | string | Código del producto |
+| `color` | string | Color del producto |
+| `talla` | string | Talla del producto |
+| `marca` | string | Marca del producto |
+| `precio` | number | Precio del producto |
+| `imagen_url` | string | URL de la imagen |
+| `stock` | integer | Cantidad en stock |
+
+---
