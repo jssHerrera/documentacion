@@ -131,8 +131,12 @@ Consulta tiendas con stock disponible para un producto específico.
   "location": {
     "lat": -12.0464,
     "lng": -77.0428
-  }
+  },
+  "storeName":"KAYSER LURIN - KAYSER",
+  "storeQnty":5
 }
+
+
 ```
   </Card>
 
@@ -152,11 +156,13 @@ Consulta tiendas con stock disponible para un producto específico.
 
 | Campo | Tipo | Requerido | Descripción |
 |-------|------|-----------|-------------|
-| `sku` | string | Sí | Código SKU del producto |
-| `sku_padre` | string | Sí | Código SKU padre del producto |
+| `sku` | string | Condicional | Código SKU del producto (enviar `sku` o `sku_padre`; al menos uno es obligatorio). |
+| `sku_padre` | string | Condicional | Código SKU padre del producto (enviar `sku` o `sku_padre`; al menos uno es obligatorio). |
 | `location` | object | Sí | Ubicación geográfica |
 | `location.lat` | number | Sí | Latitud |
 | `location.lng` | number | Sí | Longitud |
+| `storeName` | string | NO | Nombre de la tienda |
+| `storeQnty` | integer | NO | Cantidad de unidades en stock en la tienda (valor por defecto: 5) |
 
 </div>
 
@@ -171,7 +177,6 @@ Consulta tiendas con stock disponible para un producto específico.
   "ok": true,
   "message": "Tiendas con Stock",
   "data": {
-    "sku_padre": "50.200",
     "tiendas_encontradas": 62,
     "tiendas": [
       {
