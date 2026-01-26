@@ -13,7 +13,6 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 Todos los endpoints protegidos requieren un token JWT obtenido desde el endpoint de autenticación.
 
-<div style="background: #f6f8fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #667eea; margin-top: 1rem;">
 
 - **Tipo:** HTTP Bearer
 - **Formato:** JWT
@@ -162,7 +161,7 @@ Consulta tiendas con stock disponible para un producto específico.
 | `location.lat` | number | Sí | Latitud |
 | `location.lng` | number | Sí | Longitud |
 | `storeName` | string | NO | Nombre de la tienda |
-| `storeQnty` | integer | NO | Cantidad de unidades en stock en la tienda (valor por defecto: 5) |
+| `storeQnty` | integer | NO | Cantidad de tiendas a mostrar (valor por defecto: 5) |
 
 </div>
 
