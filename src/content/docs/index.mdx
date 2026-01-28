@@ -133,7 +133,7 @@ Consulta tiendas con stock disponible para un producto específico.
     "lat": -12.0464,
     "lng": -77.0428
   },
-  "storeName":"KAYSER OPEN ATOCONGO - SAN JUAN DE MIRAFLORES",
+  "storeCod":"ALM157",
   "storeQnty":5
 }
 
@@ -181,8 +181,8 @@ Consulta tiendas con stock disponible para un producto específico.
     "tiendas_encontradas": 62,
     "tiendas": [
       {
-        "cod_tienda": "ALM124",
-        "nombre_tienda": "KAYSER OPEN ATOCONGO - SAN JUAN DE MIRAFLORES",
+        "cod_tienda": "ALM157",
+        "nombre_tienda": "TIENDA LURIN",
         "distancia_km": 0,
         "productos": [
           {
@@ -328,3 +328,75 @@ Consulta tiendas con stock disponible para un producto específico.
 </CardGrid>
 
 ---
+
+### <span style="color: #667eea;">Mostrar Tiendas</span>
+
+Lista todas las tiendas registradas junto con su código de almacén.
+
+<div style="background: linear-gradient(to right, #667eea, #764ba2); color: white; padding: 0.75rem 1.5rem; border-radius: 6px; display: inline-block; font-weight: 600; margin: 1rem 0;">
+  GET /api/v1/bot/tiendas_lista
+</div>
+
+#### Respuesta
+
+<div style="border-left: 4px solid #10b981; padding-left: 1rem; margin: 1.5rem 0;">
+
+**200 - Lista de tiendas**
+
+```json
+{
+  "ok": true,
+  "message": "Tiendas listadas",
+  "data": {
+    "tiendas_encontradas": 3,
+    "tiendas": [
+      {
+        "cod_tienda": "ALM163",
+        "nombre_tienda": "TIENDA CHACARILLA",
+      },
+      {
+        "cod_tienda": "ALM162",
+        "nombre_tienda": "TIENDA LARCO",
+      },
+      {
+        "cod_tienda": "ALM157",
+        "nombre_tienda": "TIENDA LURIN",
+      }
+    ]
+  }
+}
+```
+
+</div>
+
+<div style="border-left: 4px solid #ef4444; padding-left: 1rem; margin: 1.5rem 0;">
+
+**401 - No autorizado**
+
+```json
+{
+  "ok": false,
+  "message": "No autorizado",
+  "data": {
+    "cod": "UNAUTHORIZED"
+  }
+}
+```
+
+</div>
+
+<div style="border-left: 4px solid #ef4444; padding-left: 1rem; margin: 1.5rem 0;">
+
+**500 - Error interno**
+
+```json
+{
+  "ok": false,
+  "message": "Error interno del servidor",
+  "data": {
+    "cod": "INTERNAL_ERROR"
+  }
+}
+```
+
+</div>
